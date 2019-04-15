@@ -39,9 +39,9 @@ def create():
     #     return custom_response(error, 400)
 
     # Check if User already exists in the db
-    user_in_db = UserModel.get_by_username(data.get('username'))
+    user_in_db = UserModel.get_by_email(data.get('email'))
     if user_in_db:
-        message = {'error': 'User already exists, please supply another username'}
+        message = {'error': 'User already exists, please supply another email'}
         return custom_response(message, 400)
 
     # Pass in the user schema and get a User object (model) back
@@ -78,9 +78,9 @@ def login():
     '''
     req_data = request.get_json()
     data = user_schema.load(req_data)
-    if not data.get('username') or not data.get('password'):
-        return custom_response({'error': 'Username and Password required to login'})
-    user = UserModel.get_by_username(data.get('username'))
+    if not data.get('email') or not data.get('password'):
+        return custom_response({'error': 'Email and Password required to login'})
+    user = UserModel.get_by_email(data.get('email'))
     if not user:
         return custom_response({'error': 'invalid credentials'}, 400)
 

@@ -8,11 +8,15 @@ class UserModel(db.Model):
     __tablename__ = 'Users'
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(128), nullable=False)
+    first_name = db.Column(db.String(128), nullable=False)
+    last_name = db.Column(db.String(128), nullable=False)
+    email = db.Column(db.String(128), nullable=False)
     password = db.Column(db.String(128), nullable=False)
 
     def __init__(self, data):
-        self.username = data.get('username')
+        self.first_name = data.get('first_name')
+        self.last_name = data.get('last_name')
+        self.email = data.get('email')
         self.password = self._generate_hash(data.get('password'))
 
     def __repr__(self):
@@ -47,8 +51,8 @@ class UserModel(db.Model):
         return UserModel.query.all()
 
     @staticmethod
-    def get_by_username(username):
-        return UserModel.query.filter_by(username=username).first()
+    def get_by_email(email):
+        return UserModel.query.filter_by(email=email).first()
 
     @staticmethod
     def get_by_id(id):
@@ -57,5 +61,7 @@ class UserModel(db.Model):
 # Schemas tell us how the Model is structured
 class UserSchema(Schema):
     id = fields.Int(dump_only=True)
-    username = fields.Str(required=True)
+    first_name = fields.Str(required=False)
+    last_name = fields.Str(required=False)
+    email = fields.Str(required=True)
     password = fields.Str(required=True)
